@@ -1,39 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>💬 Simple Chatbot UI</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>💬 Feedback Form | Pallavi</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="chat-app">
-    <header class="chat-header">
-      <div class="brand">
-        <div class="avatar">🤖</div>
-        <div>
-          <h1>Shraddha's Chatbot</h1>
-          <small>Static / Demo replies</small>
-        </div>
-      </div>
-      <div class="header-actions">
-        <button id="clearBtn" title="Clear chat">Clear</button>
-      </div>
-    </header>
+  <div class="container">
+    <h1>💬 Give Your Feedback</h1>
+    <p>Rate your experience and share your thoughts 💖</p>
 
-    <main id="chatWindow" class="chat-window">
-    </main>
-
-    <div class="quick-replies" id="quickReplies">
-      <button class="qr">Hello</button>
-      <button class="qr">Help</button>
-      <button class="qr">Features</button>
+    <div class="stars" id="stars">
+      <span data-value="1">⭐</span>
+      <span data-value="2">⭐</span>
+      <span data-value="3">⭐</span>
+      <span data-value="4">⭐</span>
+      <span data-value="5">⭐</span>
     </div>
 
-    <form id="inputForm" class="input-area">
-      <input id="messageInput" type="text" placeholder="Type a message and press Enter..." autocomplete="off" />
-      <button type="submit" id="sendBtn">Send</button>
-    </form>
+    <textarea id="comment" placeholder="Write your feedback here..."></textarea>
+    <button id="submitBtn">Submit Feedback</button>
+
+    <div class="feedback-list" id="feedbackList">
+      <h3>Previous Feedbacks</h3>
+      <ul id="feedbackItems"></ul>
+    </div>
   </div>
 
   <script src="script.js"></script>
