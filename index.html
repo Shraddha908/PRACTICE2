@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>💬 Simple Chatbot UI</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="chat-app">
+    <header class="chat-header">
+      <div class="brand">
+        <div class="avatar">🤖</div>
+        <div>
+          <h1>Shraddha's Chatbot</h1>
+          <small>Static / Demo replies</small>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="clearBtn" title="Clear chat">Clear</button>
+      </div>
+    </header>
+
+    <main id="chatWindow" class="chat-window">
+    </main>
+
+    <div class="quick-replies" id="quickReplies">
+      <button class="qr">Hello</button>
+      <button class="qr">Help</button>
+      <button class="qr">Features</button>
+    </div>
+
+    <form id="inputForm" class="input-area">
+      <input id="messageInput" type="text" placeholder="Type a message and press Enter..." autocomplete="off" />
+      <button type="submit" id="sendBtn">Send</button>
+    </form>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
