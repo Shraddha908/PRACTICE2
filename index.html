@@ -1,33 +1,442 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>💬 Feedback Form | Pallavi</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tic‑Tac‑Toe — Play&fun</title>
+<link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTv05UftXI0hBlEUNCX2F_k-KSQmqxfnRSbuA&s">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg-1: #0f172a; 
+--accent: #7c3aed; 
+--accent-2: #06b6d4; 
+--card: rgba(255,255,255,0.04);
+--glass: rgba(255,255,255,0.06);
+--glass-2: rgba(255,255,255,0.02);
+--muted: rgba(255,255,255,0.6);
+--win-glow: 0 8px 30px rgba(124,58,237,0.25);
+font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+
+
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{
+min-height:100vh;
+background: radial-gradient(1200px 600px at 10% 10%, rgba(124,58,237,0.15), transparent 8%),
+radial-gradient(1000px 500px at 90% 90%, rgba(6,182,212,0.12), transparent 10%),
+linear-gradient(180deg,var(--bg-1), #071029 60%);
+color: #e6eef8;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:36px;
+-webkit-font-smoothing:antialiased;
+-moz-osx-font-smoothing:grayscale;
+overflow:hidden;
+}
+
+.float-shape{
+position:absolute; border-radius:50%; filter:blur(40px); opacity:0.45; mix-blend-mode:screen;
+animation: floaty 12s ease-in-out infinite;
+}
+.shape-a{width:420px;height:420px;left:-120px;top:-60px;background:linear-gradient(135deg,var(--accent),#4f46e5);animation-duration:18s}
+.shape-b{width:320px;height:320px;right:-100px;bottom:-80px;background:linear-gradient(45deg,var(--accent-2),#0ea5b1);animation-duration:15s}
+
+
+@keyframes floaty{
+0%{transform:translateY(0) scale(1)}
+50%{transform:translateY(-32px) scale(1.03)}
+100%{transform:translateY(0) scale(1)}
+}
+
+
+
+.app{
+position:relative;
+width:100%;
+max-width:980px;
+background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+border-radius:18px;
+padding:26px;
+box-shadow: 0 10px 40px rgba(2,6,23,0.6);
+border:1px solid rgba(255,255,255,0.04);
+display:grid; grid-template-columns: 380px 1fr; gap:20px;
+}
+
+
+
+.panel{
+background: linear-gradient(180deg, var(--glass), rgba(255,255,255,0.02));
+border-radius:12px; padding:18px; display:flex; flex-direction:column; gap:12px; align-items:stretch;
+min-height:320px;
+}
+
+
+h1{margin:0;font-size:20px;letter-spacing:-0.2px}
+.subtitle{color:var(--muted);font-size:13px;margin-top:4px}
+
+
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+.btn{
+background:transparent;border:1px solid rgba(255,255,255,0.06); padding:8px 12px;border-radius:10px;color:inherit;cursor:pointer;font-weight:600;
+transition:all .18s ease;backdrop-filter: blur(6px);
+}
+.btn:hover{transform:translateY(-3px);box-shadow:var(--win-glow)}
+.btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));border:0;color:#071029}
+
+
+.scoreboard{display:flex;gap:12px;margin-top:6px}
+.score{flex:1;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:10px;text-align:center}
+.score .num{font-size:20px;font-weight:800}
+.muted{color:var(--muted);font-size:13px}
+
+
+
+.board-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center}
+.board{
+width:360px;height:360px;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:12px;padding:18px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:16px;box-shadow:var(--win-glow);
+}
+.cell{
+background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));display:flex;align-items:center;justify-content:center;border-radius:10px;font-size:56px;cursor:pointer;user-select:none;transition:transform .12s ease, backgroun=.18s ease;
+border:1px solid rgba(255,255,255,0.03);
+}
+.cell:hover{transform:translateY(-6px)}
+.cell.taken{cursor:default;transform:none;opacity:0.95}
+
+
+.status{margin-top:14px;text-align:center}
+
+.status strong{display:block;font-size:18px}
+
+
+.hint{font-size:12px;color:var(--muted);margin-top:6px}
+
+
+footer{grid-column:1/-1;text-align:center;margin-top:6px;color:var(--muted);font-size:12px}
+
+
+
+@media (max-width:880px){
+.app{grid-template-columns:1fr;max-width:720px}
+.board{width:300px;height:300px}
+}
+@media (max-width:420px){
+.board{width:260px;height:260px}
+.cell{font-size:46px}
+}
+ 
+* winning highlight */
+.cell.win{background:linear-gradient(90deg, rgba(124,58,237,0.16), rgba(6,182,212,0.12));transform:scale(1.04)}
+
+
+</style>
 </head>
 <body>
-  <div class="container">
-    <h1>💬 Give Your Feedback</h1>
-    <p>Rate your experience and share your thoughts 💖</p>
+<div class="float-shape shape-a" aria-hidden="true"></div>
+<div class="float-shape shape-b" aria-hidden="true"></div>
 
-    <div class="stars" id="stars">
-      <span data-value="1">⭐</span>
-      <span data-value="2">⭐</span>
-      <span data-value="3">⭐</span>
-      <span data-value="4">⭐</span>
-      <span data-value="5">⭐</span>
-    </div>
 
-    <textarea id="comment" placeholder="Write your feedback here..."></textarea>
-    <button id="submitBtn">Submit Feedback</button>
+<main class="app" role="application" aria-label="Tic tac toe game">
+<section class="panel" aria-label="Game controls">
+<div>
+<h1>Tic‑Tac‑Toe</h1>
+<div class="subtitle">Classic game with a modern, animated background — choose mode and play!</div>
+</div>
 
-    <div class="feedback-list" id="feedbackList">
-      <h3>Previous Feedbacks</h3>
-      <ul id="feedbackItems"></ul>
-    </div>
-  </div>
 
-  <script src="script.js"></script>
+<div class="controls" role="toolbar" aria-label="game mode and actions">
+<button class="btn mode-btn" id="modePvP" aria-pressed="true">2-Player</button>
+<button class="btn mode-btn" id="modeCpu">Vs Computer</button>
+<button class="btn" id="undoBtn">Undo</button>
+<button class="btn primary" id="restartBtn">Restart</button>
+</div>
+
+
+<div class="scoreboard" aria-live="polite">
+<div class="score">
+<div class="muted">Player X</div>
+<div class="num" id="scoreX">0</div>
+</div>
+<div class="score">
+<div class="muted">Ties</div>
+<div class="num" id="scoreT">0</div>
+</div>
+<div class="score">
+<div class="muted">Player O</div>
+<div class="num" id="scoreO">0</div>
+</div>
+</main>
+<div style="margin-top:8px;color:var(--muted);font-size:13px">
+<div><strong>Tips:</strong></div>
+<ul style="margin:6px 0 0 18px;padding:0;color:var(--muted)">
+<li>Corner first for best chance vs random play.</li>
+<li>AI is unbeatable — try to force a draw!</li>
+</ul>
+</div>
+
+
+<div style="margin-top:auto;font-size:12px;color:var(--muted)">Made with ❤️ — Enjoy & share</div>
+</section>
+
+
+<section class="board-wrap">
+<div class="board" id="board" role="grid" aria-label="Tic tac toe board">
+
+</div>
+
+
+<div class="status" id="status" aria-live="polite">
+<strong id="turnLine">X's turn</strong>
+<div class="hint">Click a square to place your mark</div>
+</div>
+
+
+<footer>HTML • CSS • JavaScript — Single file</footer>
+</section>
+</main>
+
+
+<script>
+
+const boardEl = document.getElementById('board');
+const statusEl = document.getElementById('turnLine');
+const restartBtn = document.getElementById('restartBtn');
+const undoBtn = document.getElementById('undoBtn');
+const modePvP = document.getElementById('modePvP');
+const modeCpu = document.getElementById('modeCpu');
+const scoreXEl = document.getElementById('scoreX');
+const scoreOEl = document.getElementById('scoreO');
+const scoreTEl = document.getElementById('scoreT');
+
+
+let board = Array(9).fill(null); 
+let currentPlayer = 'X';
+let running = true;
+let vsComputer = false;
+let history = []; 
+let scores = { X: 0, O: 0, T: 0 };
+
+
+
+const WIN_LINES = [
+[0,1,2],[3,4,5],[6,7,8],
+[0,3,6],[1,4,7],[2,5,8],
+[0,4,8],[2,4,6]
+];
+function createBoard(){
+boardEl.innerHTML = '';
+for(let i=0;i<9;i++){
+const cell = document.createElement('button');
+cell.className = 'cell';
+cell.setAttribute('data-index', i);
+cell.setAttribute('aria-label', `Cell ${i+1}`);
+cell.setAttribute('role','gridcell');
+cell.addEventListener('click', onCellClick);
+boardEl.appendChild(cell);
+}
+}
+
+
+
+function render(){
+const cells = boardEl.querySelectorAll('.cell');
+cells.forEach((cell, idx) => {
+cell.classList.remove('win','taken');
+cell.textContent = board[idx] || '';
+if(board[idx]) cell.classList.add('taken');
+});
+
+
+const winner = checkWinner(board);
+if(winner){
+running = false;
+if(winner === 'TIE'){
+statusEl.textContent = "It's a tie!";
+scores.T += 1;
+scoreTEl.textContent = scores.T;
+} else {
+statusEl.textContent = `${winner} wins!`;
+scores[winner] += 1;
+if(winner === 'X') scoreXEl.textContent = scores.X; else scoreOEl.textContent = scores.O;
+
+const winLine = getWinningLine(board);
+if(winLine){
+winLine.forEach(i => cells[i].classList.add('win'));
+}
+}
+} else {
+statusEl.textContent = `${currentPlayer}'s turn`;
+}
+}
+
+
+function onCellClick(e){
+const idx = Number(e.currentTarget.dataset.index);
+if(!running) return;
+if(board[idx]) return; 
+
+
+makeMove(idx, currentPlayer);
+
+
+if(vsComputer && running){
+
+setTimeout(()=>{
+const aiMove = bestMove(board, 'O');
+if(aiMove >= 0){
+makeMove(aiMove, 'O');
+}
+}, 180);
+}
+}
+function makeMove(idx, player){
+history.push({board: board.slice(), player, idx});
+board[idx] = player;
+
+currentPlayer = (player === 'X') ? 'O' : 'X';
+render();
+}
+
+undoBtn.addEventListener('click', ()=>{
+if(history.length === 0) return;
+
+const last = history.pop();
+board = last.board.slice();
+currentPlayer = last.player;
+running = true;
+render();
+});
+
+restartBtn.addEventListener('click', ()=>{
+resetGame();
+});
+
+modePvP.addEventListener('click', ()=>{ setMode(false); });
+modeCpu.addEventListener('click', ()=>{ setMode(true); });
+
+
+function setMode(toCpu){
+vsComputer = Boolean(toCpu);
+modePvP.setAttribute('aria-pressed', (!vsComputer).toString());
+modeCpu.setAttribute('aria-pressed', (vsComputer).toString());
+modePvP.classList.toggle('primary', !vsComputer);
+modeCpu.classList.toggle('primary', vsComputer);
+resetGame();
+}
+
+
+function resetGame(){
+board = Array(9).fill(null);
+currentPlayer = 'X';
+running = true;
+history = [];
+render();
+}
+
+function checkWinner(bd){
+for(const line of WIN_LINES){
+const [a,b,c] = line;
+if(bd[a] && bd[a] === bd[b] && bd[a] === bd[c]){
+return bd[a];
+}
+}
+if(bd.every(cell => cell)) return 'TIE';
+return null;
+}
+
+
+
+function getWinningLine(bd){
+for(const line of WIN_LINES){
+const [a,b,c] = line;
+if(bd[a] && bd[a] === bd[b] && bd[a] === bd[c]) return line;
+}
+return null;
+}
+
+
+function bestMove(bd, aiPlayer){
+
+if(bd.every(v => v === null)) return [0,2,6,8][Math.floor(Math.random()*4)];
+
+
+let bestScore = -Infinity;
+let move = -1;
+for(let i=0;i<9;i++){
+if(!bd[i]){
+bd[i] = aiPlayer;
+const score = minimax(bd, 0, false, aiPlayer);
+bd[i] = null;
+if(score > bestScore){ bestScore = score; move = i; }
+}
+}
+return move;
+}
+
+
+function minimax(bd, depth, isMaximizing, aiPlayer){
+const other = aiPlayer === 'O' ? 'X' : 'O';
+const result = checkWinner(bd);
+if(result !== null){
+if(result === 'TIE') return 0;
+return (result === aiPlayer) ? 10 - depth : depth - 10;
+}
+
+
+if(isMaximizing){
+let best = -Infinity;
+for(let i=0;i<9;i++){
+if(!bd[i]){
+bd[i] = aiPlayer;
+const score = minimax(bd, depth+1, false, aiPlayer);
+bd[i] = null;
+best = Math.max(best, score);
+}
+}
+return best;
+} else {
+let best = Infinity;
+for(let i=0;i<9;i++){
+if(!bd[i]){
+bd[i] = other;
+const score = minimax(bd, depth+1, true, aiPlayer);
+bd[i] = null;
+best = Math.min(best, score);
+}
+}
+return best;
+}
+}
+
+
+
+createBoard();
+setMode(false);
+render();
+
+
+
+boardEl.addEventListener('keydown', (e) => {
+const active = document.activeElement;
+if(!active || !active.classList.contains('cell')) return;
+let idx = Number(active.dataset.index);
+if(e.key === 'ArrowRight') idx = (idx+1)%9;
+if(e.key === 'ArrowLeft') idx = (idx+8)%9;
+if(e.key === 'ArrowUp') idx = (idx+6)%9;
+if(e.key === 'ArrowDown') idx = (idx+3)%9;
+if(e.key === 'Enter' || e.key === ' ') { active.click(); e.preventDefault(); return; }
+boardEl.querySelector(`[data-index='${idx}']`).focus();
+});
+
+setTimeout(()=>{
+const first = boardEl.querySelector('[data-index="0"]');
+if(first) first.tabIndex = 0;
+}, 400);
+
+
+</script>
 </body>
 </html>
